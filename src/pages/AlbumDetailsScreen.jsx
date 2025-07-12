@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import WS_BASE_URL from '@/services/conf';
@@ -128,13 +127,13 @@ const AlbumDetailsScreen = ({ showNotification }) => {
                     <img
                       src={`https://213.176.65.159.nip.io:4435${media.url}`}
                       alt={media.alt || `Медиа ${index + 1}`}
-                      className="w-full h-32 object-cover rounded-md"
+                      className="w-full aspect-[4/3] object-contain rounded-md"
                     />
                   ) : (
                     <video
                       src={`https://213.176.65.159.nip.io:4435${media.url}`}
                       alt={media.alt || `Медиа ${index + 1}`}
-                      className="w-full h-32 object-cover rounded-md"
+                      className="w-full aspect-[4/3] object-contain rounded-md"
                       controls
                     />
                   )}
@@ -146,30 +145,30 @@ const AlbumDetailsScreen = ({ showNotification }) => {
               </p>
             )}
           </div>
+          <div className="flex flex-col sm:flex-row sm:gap-3 sm:flex-wrap justify-center mt-6">
+            <input
+              type="file"
+              ref={fileInputRef}
+              accept="image/*,video/*"
+              multiple
+              className="hidden"
+              onChange={handleFileChange}
+            />
+            <button
+              onClick={handleAddMedia}
+              className="bg-blue-500 text-white p-3 rounded-lg w-full sm:w-auto mb-2 sm:mb-0 hover:bg-blue-600"
+            >
+              + Добавить медиа
+            </button>
+            <button
+              onClick={() => showNotification('Функция будет доступна в Telegram miniApp')}
+              className="bg-blue-300 text-white p-3 rounded-lg w-full sm:w-auto mb-2 sm:mb-0 hover:bg-blue-400"
+            >
+              Пригласить
+            </button>
+          </div>
         </>
       )}
-      <div className="fixed bottom-4 left-4 right-4 sm:static sm:flex sm:gap-3 sm:flex-wrap">
-        <input
-          type="file"
-          ref={fileInputRef}
-          accept="image/*,video/*"
-          multiple
-          className="hidden"
-          onChange={handleFileChange}
-        />
-        <button
-          onClick={handleAddMedia}
-          className="bg-blue-500 text-white p-3 rounded-lg w-full sm:w-auto mb-2 sm:mb-0 hover:bg-blue-600"
-        >
-          + Добавить медиа
-        </button>
-        <button
-          onClick={() => showNotification('Функция будет доступна в Telegram miniApp')}
-          className="bg-blue-300 text-white p-3 rounded-lg w-full sm:w-auto mb-2 sm:mb-0 hover:bg-blue-400"
-        >
-          Пригласить
-        </button>
-      </div>
     </div>
   );
 };
