@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import WS_BASE_URL from '@/services/conf';
+import { useLogin } from '@/services/AuthContext';
 
 const AlbumDetailsScreen = ({ showNotification }) => {
   const navigate = useNavigate();
@@ -8,8 +9,11 @@ const AlbumDetailsScreen = ({ showNotification }) => {
   const [albumData, setAlbumData] = useState({ title: '', description: '', date: '', media: [] });
   const [wsError, setWsError] = useState(null);
 
+  const { login } = useLogin();
+  const jwt = login.jwt;
+
   useEffect(() => {
-    const ws = new WebSocket(`${WS_BASE_URL}/albums/ws/${id}`);
+    const ws = new WebSocket(`${WS_BASE_URL}/albums/ws?album=${id}&token=${jwt}`);
 
     ws.onopen = () => {
       console.log('WebSocket connected');
