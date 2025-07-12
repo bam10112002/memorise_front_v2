@@ -126,7 +126,7 @@ const AlbumDetailsScreen = ({ showNotification }) => {
                 >
                   {media.type.startsWith('image/') ? (
                     <img
-                      src={media.url}
+                      src={`https://213.176.65.159.nip.io:4435${media.url}`}
                       alt={media.alt || `Медиа ${index + 1}`}
                       className="w-full h-32 object-cover rounded-md"
                     />
