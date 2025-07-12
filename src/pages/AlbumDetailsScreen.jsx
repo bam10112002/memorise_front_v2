@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import WS_BASE_URL from '@/services/conf';
 import { useLogin } from '@/services/AuthContext';
@@ -8,19 +8,20 @@ const AlbumDetailsScreen = ({ showNotification }) => {
   const { id } = useParams();
   const [albumData, setAlbumData] = useState({ title: '', description: '', date: '', media: [] });
   const [wsError, setWsError] = useState(null);
-
+  const fileInputRef = useRef(null);
+  const wsRef = useRef(null);
   const { login } = useLogin();
   const jwt = login.jwt;
 
   useEffect(() => {
-    const ws = new WebSocket(`${WS_BASE_URL}/albums/ws?album=${id}&token=${jwt}`);
+    wsRef.current = new WebSocket(`${WS_BASE_URL}/albums/ws?album=${id}&token=${jwt}`);
 
-    ws.onopen = () => {
+    wsRef.current.onopen = () => {
       console.log('WebSocket connected');
       setWsError(null);
     };
 
-    ws.onmessage = (event) => {
+    wsRef.current.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
         setAlbumData({
@@ -35,23 +36,61 @@ const AlbumDetailsScreen = ({ showNotification }) => {
       }
     };
 
-    ws.onerror = (error) => {
+    wsRef.current.onerror = (error) => {
       console.error('WebSocket error:', error);
       setWsError('Ошибка подключения к серверу');
     };
 
-    ws.onclose = () => {
+    wsRef.current.onclose = () => {
       console.log('WebSocket disconnected');
       setWsError('Соединение с сервером разорвано');
     };
 
     return () => {
-      ws.close();
+      wsRef.current.close();
     };
-  }, [id]);
+  }, [id, jwt]);
 
+  const handleAddMedia = () => {
+    fileInputRef.current.click();
+  };
 
-  
+  const handleFileChange = (event) => {
+    const files = event.target.files;
+    if (files.length > 0 && wsRef.current.readyState === WebSocket.OPEN) {
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const fileType = file.type.startsWith('image/') ? 'addPhoto' : 
+                          file.type.startsWith('video/') ? 'addVideo' : null;
+          
+          if (fileType) {
+            const message = {
+              type: fileType,
+              albumId: id,
+              file: e.target.result,
+              fileName: file.name,
+              mimeType: file.type
+            };
+            
+            try {
+              wsRef.current.send(JSON.stringify(message));
+              showNotification('Медиа успешно отправлено');
+            } catch (error) {
+              console.error('Error sending file:', error);
+              showNotification('Ошибка при отправке медиа');
+            }
+          } else {
+            showNotification('Неподдерживаемый тип файла');
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    } else {
+      showNotification('Не удалось отправить медиа: соединение не установлено');
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-6 max-w-md sm:max-w-lg md:max-w-4xl">
       <div className="flex items-center justify-between mb-4">
@@ -100,8 +139,16 @@ const AlbumDetailsScreen = ({ showNotification }) => {
         </>
       )}
       <div className="fixed bottom-4 left-4 right-4 sm:static sm:flex sm:gap-3 sm:flex-wrap">
+        <input
+          type="file"
+          ref={fileInputRef}
+          accept="image/*,video/*"
+          multiple
+          className="hidden"
+          onChange={handleFileChange}
+        />
         <button
-          onClick={() => showNotification('Функция будет доступна в Telegram miniApp')}
+          onClick={handleAddMedia}
           className="bg-blue-500 text-white p-3 rounded-lg w-full sm:w-auto mb-2 sm:mb-0 hover:bg-blue-600"
         >
           + Добавить медиа
