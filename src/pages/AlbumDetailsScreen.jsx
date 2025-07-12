@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import {WS_BASE_URL, API_BASE_URL} from '@/services/conf';
+import WS_BASE_URL from '@/services/conf';
 import { useLogin } from '@/services/AuthContext';
 
 const AlbumDetailsScreen = ({ showNotification }) => {
@@ -132,7 +132,7 @@ const AlbumDetailsScreen = ({ showNotification }) => {
                     />
                   ) : (
                     <video
-                      src={`${API_BASE_URL}${media.url}`}
+                      src={`https://213.176.65.159.nip.io:4435${media.url}`}
                       alt={media.alt || `Медиа ${index + 1}`}
                       className="w-full h-32 object-cover rounded-md"
                       controls
