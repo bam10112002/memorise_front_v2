@@ -9,7 +9,7 @@ const AlbumDetailsScreen = ({ showNotification }) => {
   const [wsError, setWsError] = useState(null);
 
   useEffect(() => {
-    const ws = new WebSocket(`${WS_BASE_URL}/ws/${id}`);
+    const ws = new WebSocket(`${WS_BASE_URL}/albums/ws/${id}`);
 
     ws.onopen = () => {
       console.log('WebSocket connected');
