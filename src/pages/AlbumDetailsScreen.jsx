@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import WS_BASE_URL from '@/services/conf';
@@ -68,14 +69,14 @@ const AlbumDetailsScreen = ({ showNotification }) => {
             const message = {
               type: fileType,
               albumId: id,
-              file: e.target.result,
+              file: e.target.result.split(',')[1], // Remove data URI prefix
               fileName: file.name,
               mimeType: file.type
             };
             
             try {
               wsRef.current.send(JSON.stringify(message));
-              showNotification('Медиа успешно отправлено');
+              showNotification('Медиа отправлено, ожидается обработка');
             } catch (error) {
               console.error('Error sending file:', error);
               showNotification('Ошибка при отправке медиа');
@@ -123,11 +124,20 @@ const AlbumDetailsScreen = ({ showNotification }) => {
                   onClick={() => navigate(`/media/${media.id}`)}
                   className="bg-white rounded-lg shadow cursor-pointer hover:shadow-md transition-shadow"
                 >
-                  <img
-                    src={media.url || 'https://avatars.mds.yandex.net/i?id=fa44ca26af14671d6bcc67a7f2f9644dbcddda5b-4899615-images-thumbs&n=13'}
-                    alt={media.alt || `Медиа ${index + 1}`}
-                    className="w-full h-32 object-cover rounded-md"
-                  />
+                  {media.type.startsWith('image/') ? (
+                    <img
+                      src={media.url}
+                      alt={media.alt || `Медиа ${index + 1}`}
+                      className="w-full h-32 object-cover rounded-md"
+                    />
+                  ) : (
+                    <video
+                      src={media.url}
+                      alt={media.alt || `Медиа ${index + 1}`}
+                      className="w-full h-32 object-cover rounded-md"
+                      controls
+                    />
+                  )}
                 </div>
               ))
             ) : (
