@@ -21,6 +21,7 @@ const AlbumDetailsScreen = ({ showNotification }) => {
       setWsError(null);
     };
 
+
     wsRef.current.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
