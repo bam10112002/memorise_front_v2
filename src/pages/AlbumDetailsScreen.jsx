@@ -169,13 +169,13 @@ const AlbumDetailsScreen = ({ showNotification }) => {
                     <img
                       src={`https://213.176.65.159.nip.io/albums${media.url}`}
                       alt={media.alt || `Медиа ${index + 1}`}
-                      className="w-full aspect-[4/3] object-contain rounded-md"
+                      className="w-full h-48 sm:h-64 object-cover rounded-md"
                     />
                   ) : (
                     <video
                       src={`https://213.176.65.159.nip.io/albums${media.url}`}
                       alt={media.alt || `Медиа ${index + 1}`}
-                      className="w-full aspect-[4/3] object-contain rounded-md"
+                      className="w-full h-48 sm:h-64 object-contain rounded-md"
                       controls
                     />
                   )}
