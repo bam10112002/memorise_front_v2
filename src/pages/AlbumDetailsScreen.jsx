@@ -133,20 +133,20 @@ const AlbumDetailsScreen = ({ showNotification }) => {
                 <div
                   key={index}
                   onClick={() => navigate(`/media/${media.id}`)}
-                  className="rounded-lg shadow cursor-pointer hover:shadow-md transition-shadow p-0 m-0 overflow-hidden"
+                  className="rounded-lg shadow cursor-pointer hover:shadow-md transition-shadow p-0 m-0 overflow-hidden aspect-w-3 aspect-h-4"
                 >
                   {media.type.startsWith('image/') ? (
                     <img
                       src={`https://213.176.65.159.nip.io/albums${media.url}`}
                       alt={media.alt || `Медиа ${index + 1}`}
-                      className="w-full max-h-48 sm:max-h-64 object-contain rounded-md"
+                      className="w-full h-full object-cover rounded-md"
                       loading="lazy"
                     />
                   ) : (
                     <video
                       src={`https://213.176.65.159.nip.io/albums${media.url}`}
                       alt={media.alt || `Медиа ${index + 1}`}
-                      className="w-full max-h-48 sm:max-h-64 object-contain rounded-md"
+                      className="w-full h-full object-cover rounded-md"
                       controls
                     />
                   )}
