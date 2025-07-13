@@ -18,7 +18,7 @@ const AlbumDetailsScreen = ({ showNotification }) => {
     wsRef.current = new WebSocket(`${WS_BASE_URL}/albums/ws?album=${id}&token=${jwt}`);
 
     wsRef.current.onopen = () => {
-      console.log('WebSocket connected');
+      console.log('WebSocket подключен');
       setWsError(null);
     };
 
@@ -32,18 +32,18 @@ const AlbumDetailsScreen = ({ showNotification }) => {
           media: data.media || []
         });
       } catch (error) {
-        console.error('Error parsing WebSocket message:', error);
+        console.error('Ошибка обработки сообщения WebSocket:', error);
         setWsError('Ошибка получения данных альбома');
       }
     };
 
     wsRef.current.onerror = (error) => {
-      console.error('WebSocket error:', error);
+      console.error('Ошибка WebSocket:', error);
       setWsError('Ошибка подключения к серверу');
     };
 
     wsRef.current.onclose = () => {
-      console.log('WebSocket disconnected');
+      console.log('WebSocket отключен');
       setWsError('Соединение с сервером разорвано');
     };
 
@@ -85,19 +85,17 @@ const AlbumDetailsScreen = ({ showNotification }) => {
 
       const data = await response.json();
       setUploadStatus(`Файл успешно загружен! ID файла: ${data.file_id}`);
-      fileInputRef.current.value = ''; // Clear input
+      fileInputRef.current.value = ''; // Очистка поля ввода
     } catch (error) {
       setUploadStatus(`Ошибка: ${error.message}`);
     }
   };
 
-  // Функция для обработки клика по кнопке выбора файла
   const handleFileSelect = () => {
     if (window.Telegram?.WebApp) {
-      // Если доступен Telegram WebApp, можно добавить дополнительную логику
-      fileInputRef.current.click(); // Программно вызываем клик по input
+      fileInputRef.current.click();
     } else {
-      fileInputRef.current.click(); // Обычный вызов для не-Telegram окружения
+      fileInputRef.current.click();
     }
   };
 
@@ -131,9 +129,9 @@ const AlbumDetailsScreen = ({ showNotification }) => {
               <input
                 type="file"
                 ref={fileInputRef}
-                accept="image/*,video/*" // Ограничиваем выбор изображениями и видео
-                className="hidden" // Скрываем стандартный input
-                onChange={uploadFile} // Автоматически загружаем после выбора
+                accept="image/*,video/*"
+                className="hidden"
+                onChange={uploadFile}
               />
               <button
                 onClick={handleFileSelect}
@@ -169,13 +167,13 @@ const AlbumDetailsScreen = ({ showNotification }) => {
                     <img
                       src={`https://213.176.65.159.nip.io/albums${media.url}`}
                       alt={media.alt || `Медиа ${index + 1}`}
-                      className="w-full h-48 sm:h-64 object-cover rounded-md"
+                      className="w transformations: translate3d(0, 0, 0); -full max-h-48 sm:max-h-64 object-contain rounded-md"
                     />
                   ) : (
                     <video
                       src={`https://213.176.65.159.nip.io/albums${media.url}`}
                       alt={media.alt || `Медиа ${index + 1}`}
-                      className="w-full h-48 sm:h-64 object-contain rounded-md"
+                      className="w-full max-h-48 sm:max-h-64 object-contain rounded-md"
                       controls
                     />
                   )}
