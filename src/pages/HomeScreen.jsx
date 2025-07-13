@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import DateFilterSelect from '@/components/home-components/DateFilterSelect';
 import AlbumCard from '@/components/home-components/AlbumCard';
 import AlbumService from '@/services/AlbumService'; // Adjust the import path as needed
+import { useLogin } from '@/services/AuthContext';
 
 const HomeScreen = () => {
   const [albums, setAlbums] = useState([]);
