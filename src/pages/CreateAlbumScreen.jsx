@@ -10,6 +10,8 @@ const CreateAlbumScreen = () => {
     description: '',
   });
   const [error, setError] = useState(null);
+  const { login } = useLogin();
+  const jwt = login.jwt;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -25,7 +27,7 @@ const CreateAlbumScreen = () => {
       if (!formData.title) {
         throw new Error('Album name is required');
       }
-      await AlbumService.createAlbum(formData);
+      await AlbumService.createAlbum(formData, jwt);
       navigate('/');
     } catch (err) {
       setError(err.message || 'Failed to save album');

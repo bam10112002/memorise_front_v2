@@ -8,11 +8,13 @@ const HomeScreen = () => {
   const [albums, setAlbums] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const { login } = useLogin();
+  const jwt = login.jwt;
+  
   useEffect(() => {
     const fetchAlbums = async () => {
       try {
-        const data = await AlbumService.listAlbums();
+        const data = await AlbumService.listAlbums(jwt);
         setAlbums(data);
         setLoading(false);
       } catch (err) {
