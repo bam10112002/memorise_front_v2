@@ -3,7 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import WS_BASE_URL from '@/services/conf';
 import { useLogin } from '@/services/AuthContext';
 
-
 const AlbumDetailsScreen = ({ showNotification }) => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -92,6 +91,16 @@ const AlbumDetailsScreen = ({ showNotification }) => {
     }
   };
 
+  // Функция для обработки клика по кнопке выбора файла
+  const handleFileSelect = () => {
+    if (window.Telegram?.WebApp) {
+      // Если доступен Telegram WebApp, можно добавить дополнительную логику
+      fileInputRef.current.click(); // Программно вызываем клик по input
+    } else {
+      fileInputRef.current.click(); // Обычный вызов для не-Telegram окружения
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-6 max-w-md sm:max-w-lg md:max-w-4xl">
       <div className="flex items-center justify-between mb-4">
@@ -122,13 +131,15 @@ const AlbumDetailsScreen = ({ showNotification }) => {
               <input
                 type="file"
                 ref={fileInputRef}
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                accept="image/*,video/*" // Ограничиваем выбор изображениями и видео
+                className="hidden" // Скрываем стандартный input
+                onChange={uploadFile} // Автоматически загружаем после выбора
               />
               <button
-                onClick={uploadFile}
+                onClick={handleFileSelect}
                 className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200"
               >
-                Загрузить
+                Выбрать из галереи
               </button>
             </div>
             {uploadStatus && (
