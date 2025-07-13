@@ -155,13 +155,13 @@ const AlbumDetailsScreen = ({ showNotification }) => {
                 >
                   {media.type.startsWith('image/') ? (
                     <img
-                      src={`https://213.176.65.159.nip.io/media/${media.filename}`}
+                      src={`https://213.176.65.159.nip.io/${media.url}`}
                       alt={media.alt || `Медиа ${index + 1}`}
                       className="w-full aspect-[4/3] object-contain rounded-md"
                     />
                   ) : (
                     <video
-                      src={`https://213.176.65.159.nip.io/media/${media.filename}`}
+                      src={`https://213.176.65.159.nip.io/${media.url}`}
                       alt={media.alt || `Медиа ${index + 1}`}
                       className="w-full aspect-[4/3] object-contain rounded-md"
                       controls
