@@ -133,13 +133,14 @@ const AlbumDetailsScreen = ({ showNotification }) => {
                 <div
                   key={index}
                   onClick={() => navigate(`/media/${media.id}`)}
-                  className="bg-white rounded-lg shadow cursor-pointer hover:shadow-md transition-shadow p-0 m-0 overflow-hidden"
+                  className="rounded-lg shadow cursor-pointer hover:shadow-md transition-shadow p-0 m-0 overflow-hidden"
                 >
                   {media.type.startsWith('image/') ? (
                     <img
                       src={`https://213.176.65.159.nip.io/albums${media.url}`}
                       alt={media.alt || `Медиа ${index + 1}`}
                       className="w-full max-h-48 sm:max-h-64 object-contain rounded-md"
+                      loading="lazy"
                     />
                   ) : (
                     <video
@@ -161,7 +162,7 @@ const AlbumDetailsScreen = ({ showNotification }) => {
             onClick={handleFileSelect}
             className="fixed bottom-6 right-6 bg-blue-600 text-white text-2xl font-bold w-14 h-14 rounded-full flex items-center justify-center hover:bg-blue-700 transition duration-200 shadow-lg"
           >
-            + Медиа
+            +
           </button>
           <input
             type="file"
