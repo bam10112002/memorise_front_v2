@@ -14,6 +14,7 @@ const HomeScreen = () => {
   
   useEffect(() => {
     const fetchAlbums = async () => {
+      if (!jwt) return;
       try {
         console.log(jwt);
         const data = await AlbumService.listAlbums(jwt);
