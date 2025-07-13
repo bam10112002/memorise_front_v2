@@ -74,7 +74,7 @@ const AlbumDetailsScreen = ({ showNotification }) => {
 
     try {
       setUploadStatus('Загрузка...');
-      const response = await fetch('https://213.176.65.159.nip.io/albums/upload', {
+      const response = await fetch(`https://213.176.65.159.nip.io/albums/upload/${id}`, {
         method: 'POST',
         body: formData,
       });
