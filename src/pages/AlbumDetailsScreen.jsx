@@ -74,7 +74,7 @@ const AlbumDetailsScreen = ({ showNotification }) => {
 
     try {
       setUploadStatus('Загрузка...');
-      const response = await fetch('https://213.176.65.159.nip.io/memorise/upload2', {
+      const response = await fetch('https://213.176.65.159.nip.io/albums/upload', {
         method: 'POST',
         body: formData,
       });
@@ -155,13 +155,13 @@ const AlbumDetailsScreen = ({ showNotification }) => {
                 >
                   {media.type.startsWith('image/') ? (
                     <img
-                      src={`https://213.176.65.159.nip.io:4435${media.url}`}
+                      src={`https://213.176.65.159.nip.io/media/${media.filename}`}
                       alt={media.alt || `Медиа ${index + 1}`}
                       className="w-full aspect-[4/3] object-contain rounded-md"
                     />
                   ) : (
                     <video
-                      src={`https://213.176.65.159.nip.io:4435${media.url}`}
+                      src={`https://213.176.65.159.nip.io/media/${media.filename}`}
                       alt={media.alt || `Медиа ${index + 1}`}
                       className="w-full aspect-[4/3] object-contain rounded-md"
                       controls
