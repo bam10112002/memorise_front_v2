@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import WS_BASE_URL from '@/services/conf';
 import { useLogin } from '@/services/AuthContext';
 
+
 const AlbumDetailsScreen = ({ showNotification }) => {
   const navigate = useNavigate();
   const { id } = useParams();
