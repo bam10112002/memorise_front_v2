@@ -8,6 +8,7 @@ const AlbumDetailsScreen = ({ showNotification }) => {
   const { id } = useParams();
   const [albumData, setAlbumData] = useState({ title: '', description: '', date: '', media: [] });
   const [wsError, setWsError] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState('');
   const fileInputRef = useRef(null);
   const wsRef = useRef(null);
   const { login } = useLogin();
@@ -20,7 +21,6 @@ const AlbumDetailsScreen = ({ showNotification }) => {
       console.log('WebSocket connected');
       setWsError(null);
     };
-
 
     wsRef.current.onmessage = (event) => {
       try {
@@ -52,43 +52,42 @@ const AlbumDetailsScreen = ({ showNotification }) => {
     };
   }, [id, jwt]);
 
-  const handleAddMedia = () => {
-    fileInputRef.current.click();
-  };
+  const uploadFile = async () => {
+    const file = fileInputRef.current.files[0];
+    setUploadStatus('');
 
-  const handleFileChange = (event) => {
-    const files = event.target.files;
-    if (files.length > 0 && wsRef.current.readyState === WebSocket.OPEN) {
-      Array.from(files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const fileType = file.type.startsWith('image/') ? 'addPhoto' : 
-                          file.type.startsWith('video/') ? 'addVideo' : null;
-          
-          if (fileType) {
-            const message = {
-              type: fileType,
-              albumId: id,
-              file: e.target.result.split(',')[1], // Remove data URI prefix
-              fileName: file.name,
-              mimeType: file.type
-            };
-            
-            try {
-              wsRef.current.send(JSON.stringify(message));
-              showNotification('Медиа отправлено, ожидается обработка');
-            } catch (error) {
-              console.error('Error sending file:', error);
-              showNotification('Ошибка при отправке медиа');
-            }
-          } else {
-            showNotification('Неподдерживаемый тип файла');
-          }
-        };
-        reader.readAsDataURL(file);
+    if (!file) {
+      setUploadStatus('Пожалуйста, выберите файл для загрузки.');
+      return;
+    }
+
+    const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
+    if (!userId) {
+      setUploadStatus('ID пользователя не найден. Убедитесь, что Telegram WebApp инициализирован.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('user_id', userId);
+    formData.append('album_id', id);
+
+    try {
+      setUploadStatus('Загрузка...');
+      const response = await fetch('https://213.176.65.159.nip.io/memorise/upload2', {
+        method: 'POST',
+        body: formData,
       });
-    } else {
-      showNotification('Не удалось отправить медиа: соединение не установлено');
+
+      if (!response.ok) {
+        throw new Error(`Ошибка загрузки: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      setUploadStatus(`Файл успешно загружен! ID файла: ${data.file_id}`);
+      fileInputRef.current.value = ''; // Clear input
+    } catch (error) {
+      setUploadStatus(`Ошибка: ${error.message}`);
     }
   };
 
@@ -116,6 +115,36 @@ const AlbumDetailsScreen = ({ showNotification }) => {
           <p id="album-date" className="text-gray-500 text-sm mb-4 text-center">
             Дата: {albumData.date}
           </p>
+          <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4 text-center">Загрузить медиа</h2>
+            <div className="flex flex-col gap-4">
+              <input
+                type="file"
+                ref={fileInputRef}
+                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              />
+              <button
+                onClick={uploadFile}
+                className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200"
+              >
+                Загрузить
+              </button>
+            </div>
+            {uploadStatus && (
+              <p
+                id="upload-status"
+                className={`mt-4 text-center ${
+                  uploadStatus.includes('Ошибка')
+                    ? 'text-red-500'
+                    : uploadStatus.includes('успешно')
+                    ? 'text-green-500'
+                    : 'text-blue-500'
+                }`}
+              >
+                {uploadStatus}
+              </p>
+            )}
+          </div>
           <div id="media-gallery" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
             {albumData.media.length > 0 ? (
               albumData.media.map((media, index) => (
@@ -147,20 +176,6 @@ const AlbumDetailsScreen = ({ showNotification }) => {
             )}
           </div>
           <div className="flex flex-col sm:flex-row sm:gap-3 sm:flex-wrap justify-center mt-6">
-            <input
-              type="file"
-              ref={fileInputRef}
-              accept="image/*,video/*"
-              multiple
-              className="hidden"
-              onChange={handleFileChange}
-            />
-            <button
-              onClick={handleAddMedia}
-              className="bg-blue-500 text-white p-3 rounded-lg w-full sm:w-auto mb-2 sm:mb-0 hover:bg-blue-600"
-            >
-              + Добавить медиа
-            </button>
             <button
               onClick={() => showNotification('Функция будет доступна в Telegram miniApp')}
               className="bg-blue-300 text-white p-3 rounded-lg w-full sm:w-auto mb-2 sm:mb-0 hover:bg-blue-400"
