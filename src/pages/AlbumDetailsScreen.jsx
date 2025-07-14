@@ -103,6 +103,16 @@ const AlbumDetailsScreen = ({ showNotification }) => {
     }
   };
 
+  const handleShareClick = () => {
+    if (window.Telegram && window.Telegram.WebApp) {
+      window.Telegram.WebApp.openTelegramLink(
+        "https://t.me/share/url?url=https://t.me/memorise_photo_bot?start=" + id
+      );
+    } else {
+      alert("Telegram WebApp не найден.");
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-6 max-w-md sm:max-w-lg md:max-w-4xl relative">
       <div className="flex items-center justify-between mb-4">
@@ -187,7 +197,7 @@ const AlbumDetailsScreen = ({ showNotification }) => {
           )}
           <div className="flex flex-col sm:flex-row sm:gap-3 sm:flex-wrap justify-center mt-6">
             <button
-              onClick={() => showNotification('Функция будет доступна в Telegram miniApp')}
+              onClick={handleShareClick}
               className="bg-blue-300 text-white p-3 rounded-lg w-full sm:w-auto mb-2 sm:mb-0 hover:bg-blue-400"
             >
               Пригласить
