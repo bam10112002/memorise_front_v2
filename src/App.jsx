@@ -5,6 +5,7 @@ import CreateAlbumScreen from '@/pages/CreateAlbumScreen';
 import AlbumDetailsScreen from '@/pages/AlbumDetailsScreen';
 import Notification from '@/components/Notification';
 
+
 const App = () => {
   const [notificationMessage, setNotificationMessage] = useState('');
 
