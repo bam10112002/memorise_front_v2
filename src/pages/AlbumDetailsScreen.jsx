@@ -81,7 +81,7 @@ const AlbumDetailsScreen = ({ showNotification }) => {
       }
 
       const data = await response.json();
-      setUploadStatus(`Файл успешно загружен! ID файла: ${data.file_id}`);
+      setUploadStatus(`Медиа успешно загружено`);
       fileInputRef.current.value = '';
       setTimeout(() => setUploadStatus(''), 3000);
     } catch (error) {

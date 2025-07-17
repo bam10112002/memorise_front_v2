@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AlbumService from '@/services/AlbumService'; // Adjust the import path as needed
+import AlbumService from '@/services/AlbumService';
 import { useLogin } from '@/services/AuthContext';
 
 const CreateAlbumScreen = () => {
@@ -16,7 +16,6 @@ const CreateAlbumScreen = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log(`Input changed: ${name} = ${value}`); // Debug log
     setFormData((prev) => ({
       ...prev,
       [name]: value,
