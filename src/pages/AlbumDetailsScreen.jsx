@@ -62,16 +62,8 @@ const AlbumDetailsScreen = ({ showNotification }) => {
       return;
     }
 
-    const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
-    if (!userId) {
-      setUploadStatus('ID пользователя не найден. Убедитесь, что Telegram WebApp инициализирован.');
-      setTimeout(() => setUploadStatus(''), 3000);
-      return;
-    }
-
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('user_id', userId);
     formData.append('album_id', id);
 
     try {
@@ -143,8 +135,8 @@ const AlbumDetailsScreen = ({ showNotification }) => {
           <div id="media-gallery" className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
             {albumData.media.length > 0 ? (
               albumData.media.map((media, index) => (
-                <div key={index} className="rounded-lg shadow cursor-pointer hover:shadow-md transition-shadow p-0 m-0 overflow-hidden aspect-w-3 aspect-h-4">
-                    <img src={media} alt={media.alt || `Медиа ${index + 1}`} className="w-full h-full object-cover rounded-md" loading="lazy"/>
+                <div key={index} className="rounded-lg shadow cursor-pointer hover:shadow-md transition-shadow p-0 m-0 overflow-hidden aspect-[3/4]">
+                    <img src={media} alt = {`Медиа ${index + 1}`} className="w-full h-full object-cover rounded-md" loading="lazy"/>
                 </div>
               ))
             ) : (
