@@ -62,6 +62,7 @@ const FileUploader = ({ albumId, jwt, setUploadStatus, uploadStatus }) => {
         ref={fileInputRef}
         accept="image/*"
         className="hidden"
+        multiple
         onChange={uploadFile}
       />
       {uploadStatus && (
