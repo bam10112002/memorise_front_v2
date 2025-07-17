@@ -76,7 +76,7 @@ const AlbumDetailsScreen = ({ showNotification }) => {
 
     try {
       setUploadStatus('Загрузка...');
-      const response = await fetch(`https://213.176.65.159.nip.io/albums/upload/${id}`, {
+      const response = await fetch(`https://213.176.65.159.nip.io/albums/tg-upload/${id}`, {
         method: 'POST',
         body: formData,
       });
@@ -140,26 +140,8 @@ const AlbumDetailsScreen = ({ showNotification }) => {
           <div id="media-gallery" className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
             {albumData.media.length > 0 ? (
               albumData.media.map((media, index) => (
-                <div
-                  key={index}
-                  onClick={() => navigate(`/media/${media.id}`)}
-                  className="rounded-lg shadow cursor-pointer hover:shadow-md transition-shadow p-0 m-0 overflow-hidden aspect-w-3 aspect-h-4"
-                >
-                  {media.type.startsWith('image/') ? (
-                    <img
-                      src={`https://213.176.65.159.nip.io/albums${media.url}`}
-                      alt={media.alt || `Медиа ${index + 1}`}
-                      className="w-full h-full object-cover rounded-md"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <video
-                      src={`https://213.176.65.159.nip.io/albums${media.url}`}
-                      alt={media.alt || `Медиа ${index + 1}`}
-                      className="w-full h-full object-cover rounded-md"
-                      controls
-                    />
-                  )}
+                <div key={index} className="rounded-lg shadow cursor-pointer hover:shadow-md transition-shadow p-0 m-0 overflow-hidden aspect-w-3 aspect-h-4">
+                    <img src={media} alt={media.alt || `Медиа ${index + 1}`} className="w-full h-full object-cover rounded-md" loading="lazy"/>
                 </div>
               ))
             ) : (
