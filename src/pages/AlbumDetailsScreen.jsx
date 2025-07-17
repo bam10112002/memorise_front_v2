@@ -52,20 +52,18 @@ const AlbumDetailsScreen = ({ showNotification }) => {
     };
   }, [id, jwt]);
 
-  const uploadFiles = async () => {
-    const files = fileInputRef.current.files;
+  const uploadFile = async () => {
+    const file = fileInputRef.current.files[0];
     setUploadStatus('');
 
-    if (!files || files.length === 0) {
-      setUploadStatus('Пожалуйста, выберите файлы для загрузки.');
+    if (!file) {
+      setUploadStatus('Пожалуйста, выберите файл для загрузки.');
       setTimeout(() => setUploadStatus(''), 3000);
       return;
     }
 
     const formData = new FormData();
-    for (const file of files) {
-      formData.append('files', file); // ключ 'files' — сервер должен принимать массив
-    }
+    formData.append('file', file);
     formData.append('album_id', id);
 
     try {
@@ -83,7 +81,7 @@ const AlbumDetailsScreen = ({ showNotification }) => {
       }
 
       const data = await response.json();
-      setUploadStatus(`Медиа успешно загружено`);
+      setUploadStatus(`Медиа успешно загружено:}`);
       fileInputRef.current.value = '';
       setTimeout(() => setUploadStatus(''), 3000);
     } catch (error) {
@@ -138,12 +136,7 @@ const AlbumDetailsScreen = ({ showNotification }) => {
             {albumData.media.length > 0 ? (
               albumData.media.map((media, index) => (
                 <div key={index} className="rounded-lg shadow cursor-pointer hover:shadow-md transition-shadow p-0 m-0 overflow-hidden aspect-[3/4]">
-                  <img
-                    src={media}
-                    alt={`Медиа ${index + 1}`}
-                    className="w-full h-full object-cover rounded-md"
-                    loading="lazy"
-                  />
+                    <img src={media} alt = {`Медиа ${index + 1}`} className="w-full h-full object-cover rounded-md" loading="lazy"/>
                 </div>
               ))
             ) : (
@@ -152,26 +145,19 @@ const AlbumDetailsScreen = ({ showNotification }) => {
               </p>
             )}
           </div>
-
-          {/* Кнопка добавления */}
           <button
             onClick={handleFileSelect}
             className="fixed bottom-6 right-6 bg-blue-600 text-white text-2xl font-bold w-14 h-14 rounded-full flex items-center justify-center hover:bg-blue-700 transition duration-200 shadow-lg"
           >
             +
           </button>
-
-          {/* Поле выбора файлов */}
           <input
             type="file"
             ref={fileInputRef}
-            accept="image/*,video/*"
-            multiple
+            accept="image/*"
             className="hidden"
-            onChange={uploadFiles}
+            onChange={uploadFile}
           />
-
-          {/* Статус загрузки */}
           {uploadStatus && (
             <div
               id="upload-status"
@@ -186,8 +172,6 @@ const AlbumDetailsScreen = ({ showNotification }) => {
               {uploadStatus}
             </div>
           )}
-
-          {/* Кнопка пригласить */}
           <div className="flex flex-col sm:flex-row sm:gap-3 sm:flex-wrap justify-center mt-6">
             <button
               onClick={handleShareClick}
