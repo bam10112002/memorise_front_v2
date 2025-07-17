@@ -108,6 +108,7 @@ const AlbumDetailsScreen = ({ showNotification }) => {
     }
   };
 
+  
   return (
     <div className="container mx-auto px-4 py-6 max-w-md sm:max-w-lg md:max-w-4xl relative">
       <div className="flex items-center justify-between mb-4">
