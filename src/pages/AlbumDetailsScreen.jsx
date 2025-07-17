@@ -79,6 +79,9 @@ const AlbumDetailsScreen = ({ showNotification }) => {
       const response = await fetch(`https://213.176.65.159.nip.io/albums/tg-upload/${id}`, {
         method: 'POST',
         body: formData,
+        headers: {
+          Authorization: `Bearer ${jwt}`
+        }
       });
 
       if (!response.ok) {
